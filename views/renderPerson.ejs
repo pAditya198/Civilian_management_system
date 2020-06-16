@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <% if(person.length>0){ %>
+    <ul>
+        <% for(let per of person) { %>
+        <li><b>Name</b> : <%= per.name %> <b>Age</b> : <%= per.age %> </li>
+        <% } %>
+    </ul>
+    <% }else{ %>
+    <h1>No Entry has been made</h1>
+    <% } %>
+</body>
+
+</html>
