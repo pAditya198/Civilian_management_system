@@ -27,7 +27,7 @@ const Family=sequelize.define('family',{
         allowNull: false,
       },
       postal: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         allowNull: false,
       },
       country: {
