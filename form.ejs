@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" type="text/css" href="fe.css">
+  <title>COVID-19 management system</title>
+</head>
+<body>
+<div class='signup-container'>
+  <div class='left-container'>
+    <h1>
+      <i class='fas fa-paw'></i>
+      COVID-19 DATABASE
+    </h1>
+    <div class='puppy'>
+      <img src='covid2.jpg'>
+    </div>
+  </div>
+  <form action="/postFamily" method="POST">
+  <div class='right-container'>
+    <header>
+      <h1>Location Form</h1>
+      <hr width="200">
+      <h1>COVID-19</h1>
+      <hr width="200">
+      <div class='set'>
+        <div class='patients-name'>
+          <label for='patients-name'>Family ID</label>
+          <input id='patients-name' name="familyId" placeholder="Enter your ID" type='text'>
+        </div>
+        <div class='patients-email'>
+          <label for='patients-email'>District</label>
+          <input id='patients-email' name="district" placeholder="Enter your district" type="text">
+        </div>
+      </div>
+      <div class='set'>
+        <div class='patients-address'>
+
+          <label for='patients-address'>Address</label>
+          <input id='patients-address' placeholder="Patient's address" type='text'>
+        </div>
+        <div class='patients-birthday'>
+          <label for='patients-birthday'>State</label>
+          <input id='patients-birthday' name="state" placeholder="Enter your state" type='text'>
+        </div>
+      </div>
+      <div class='set'>
+        <div class='phone-number'>
+          <label for='Phone-number'>Postal</label><br>
+          <input id='Phone-number' name="postal" placeholder="Enter your postal" type='text'>
+        </div>
+        <div class='phone-number'>
+          <label for='Phone-number'>Country</label><br>
+          <input id='Phone-number' name="country" placeholder="Enter your country" type='text'>
+        </div>
+      </div>
+      
+    </header>
+    <footer>
+      <div class='set'>
+        
+        <button id='next' type="submit">Submit</button>
+      </div>
+    </footer>
+  </div>
+</form>
+</div>
+</body>
+</html>
+
+
+
