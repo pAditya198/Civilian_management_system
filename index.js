@@ -24,6 +24,7 @@ app.use("/", userRoute);
 
 Family.belongsToMany(User,{constraints: true, onDelete: 'CASCADE',through:FamilyIndex})
 Medical.belongsTo(User, { constraints: true, onDelete: 'CASCADE' })
+User.hasOne(Medical)
 Medical.hasMany(History,{ constraints: true, onDelete: 'CASCADE' })
 
 sequelize

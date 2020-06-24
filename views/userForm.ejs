@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <form action="/postPerson" method="POST">
+        <% if(familyId!==""){ %>
+        <input type="hidden" name="familyId" value=<%= familyId %>>
+        <% } else { %>
+            <input type="text" name="familyId" placeholder="Enter your Family Id">
+            <% } %>
+            <input type="text" name="name" placeholder="Enter your name">
+            <input type="number" name="age" placeholder="Enter your age">
+            <input type="text" name="sex" placeholder="Enter your Sex(M/F/others)">
+            <input type="date" name="dob" placeholder="Enter your Date of Birth">
+            <input type="text" name="email" placeholder="Enter your email">
+            <input type="number" name="phone" placeholder="Enter your phone">
+            <button type="submit">Submit</button>
+    </form>
+</body>
+
+</html>
