@@ -52,10 +52,12 @@ body {
   bottom : 0px;
   position: absolute;
   text-align: center;
+  height: 100%;
+  width: 100%;
 }
 
 .left-container img {
-  height: 800;
+  height: 100%;
   width: 100%;
 }
 
