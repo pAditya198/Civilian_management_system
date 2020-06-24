@@ -80,37 +80,6 @@ exports.postHistory = (req, res, next) => {
   res.redirect("/");
 };
 
-// exports.postForm = (req, res, next) => {
-//   const entry = {};
-//   entry.name = req.body.name;
-//   entry.age = req.body.age;
-//   entry.sex = "M";
-//   entry.dob = req.body.date;
-//   entry.email = "p.aditya.198@gmail.com";
-//   entry.phone = 7985565341;
-//   if (!req.body.familyId) {
-//     const family = {
-//       familyId: 2,
-//       Address: "jhvshfjsdh",
-//       district: "allahabad",
-//       state: "up",
-//       postal: "211011",
-//       country: "India",
-//     };
-
-//     Family.create(family).then((fam) => {
-//       fam.createUser(entry);
-//     });
-//   }
-
-//   Family.find(fam=>fam.familyId===req.body.familyId).then(fam=>{
-//     fam.createUser(entry);
-//   })
-//   // person.push(entry);
-//   // User.create(entry);
-//   res.redirect("/");
-// };
-
 exports.viewPerson = (req, res, next) => {
   Family.findAll().then((fam) => {
     console.log(fam);
