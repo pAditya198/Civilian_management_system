@@ -2,7 +2,7 @@
 <html>
 <head>
   <link rel="stylesheet" type="text/css" href="fe.css">
-  <title>User form</title>
+  <title>COVID-19 management system</title>
 </head>
 <body>
 <div class='signup-container'>
@@ -21,12 +21,6 @@
       <hr width="200">
       <h1>COVID-19</h1>
       <hr width="200">
-      <form action="/postPerson" method="POST">
-        <% if(familyId!==""){ %>
-        <input type="hidden" name="familyId" value=<%= familyId %>>
-        <% } else { %>
-            <input type="text" name="familyId" placeholder="Enter your Family Id">
-            <% } %>
       <div class='set'>
         <div class='patients-name'>
           <label for='patients-name'>Name</label>
@@ -63,13 +57,17 @@
           <input id='Phone-number' placeholder="Phone-number" type='text'>
         </div>
       </div>
+      <div class='ID'>
+          <label for='ID'>CVD-ID</label>
+          <input id='PID' placeholder='Patient ID' type='text'>
+      </div>
     </header>
     <footer>
       <div class='set'>
-        <button id='next' type="submit">Submit</button>
+        <button id='back'>Back</button>
+        <button id='next'>Next</button>
       </div>
     </footer>
-  </form>
   </div>
 </div>
 </body>
