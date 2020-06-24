@@ -61,11 +61,11 @@ exports.postMedical = (req, res, next) => {
     isQuarantined: req.body.isQuarantined,
   };
   User.findByPk(req.body.id).then((user) => {
-    user.createMedical(medical).then(med=>{
-      res.render("history",{
-        id:med.id
-      })
-    })
+    user.createMedical(medical).then((med) => {
+      res.render("history", {
+        id: med.id,
+      });
+    });
   });
 };
 
@@ -116,4 +116,70 @@ exports.viewPerson = (req, res, next) => {
     console.log(fam);
     res.render("renderPerson", { person: fam });
   });
+};
+
+exports.editFamily = (req, res, next) => {
+  const family = {
+    familyId: req.body.familyId,
+    Address: req.body.Address,
+    district: req.body.district,
+    state: req.body.state,
+    postal: req.body.postal,
+    country: req.body.country,
+  };
+  Family.findAll({ where: { familyId: req.body.familyId } })
+    .then((fam) => {
+      // rewrite the edited data here
+      fam[0] = family;
+      return fam[0].save();
+    })
+    .then((result) => {
+      console.log("Family Updated");
+      res.redirect("/");
+    })
+    .catch((err) => console.log(err));
+};
+
+exports.editUser = (req, res, next) => {
+  const entry = {
+    name: req.body.name,
+    age: req.body.age,
+    sex: req.body.sex,
+    dob: req.body.dob,
+    email: req.body.email,
+    phone: req.body.phone,
+  };
+  User.findByPk(req.body.id)
+    .then((user) => {
+      // rewrite the edited data here
+      user = entry;
+      return user.save();
+    })
+    .then((result) => {
+      console.log("Family Updated");
+      res.redirect("/");
+    })
+    .catch((err) => console.log(err));
+};
+
+exports.deleteFamily = (req, res, next) => {
+  Family.findAll({ where: { familyId: req.body.familyId } })
+    .then((fam) => {
+      return fam[0].destroy();
+    })
+    .then((result) => {
+      res.redirect("/");
+    })
+    .catch((err) => console.log(err));
+};
+
+exports.deleteUser = (req, res, next) => {
+  User.findByPk(req.body.id)
+    .then((user) => {
+      return user.destroy();
+    })
+    .then((result) => {
+      res.redirect("/");
+    })
+    .catch((err) => console.log(err));
 };
