@@ -16,6 +16,10 @@ router.get('/addUser',userController.getUserForm)
 
 router.post('/postPerson',userController.postUser)
 
+router.post('/postMedical',userController.postMedical)
+
+router.post('/postHistory',userController.postHistory)
+
 router.get('/viewPerson',userController.viewPerson)
 
 module.exports=router

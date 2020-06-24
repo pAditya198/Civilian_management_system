@@ -1,9 +1,12 @@
 const person = [];
 const User = require("../model/user");
 const Family = require("../model/family");
+const Medical = require("../model/medical");
 
 exports.getPage = (req, res, next) => {
-  res.render("main", { count: person.length });
+  Family.findAll().then((fam) => {
+    res.render("main", { count: fam.length });
+  });
 };
 
 exports.getForm = (req, res, next) => {
@@ -44,7 +47,35 @@ exports.postUser = (req, res, next) => {
   };
   Family.findAll({ where: { familyId: req.body.familyId } }).then((fam) => {
     console.log(fam[0].familyId);
-    fam[0].createUser(entry);
+    fam[0].createUser(entry).then((user) => {
+      res.render("medical", {
+        id: user.id,
+      });
+    });
+  });
+};
+
+exports.postMedical = (req, res, next) => {
+  const medical = {
+    status: req.body.status,
+    isQuarantined: req.body.isQuarantined,
+  };
+  User.findByPk(req.body.id).then((user) => {
+    user.createMedical(medical).then(med=>{
+      res.render("history",{
+        id:med.id
+      })
+    })
+  });
+};
+
+exports.postHistory = (req, res, next) => {
+  const history = {
+    status: req.body.status,
+    name: req.body.name,
+  };
+  Medical.findByPk(req.body.id).then((user) => {
+    user.createHistory(history);
   });
   res.redirect("/");
 };
@@ -82,7 +113,7 @@ exports.postUser = (req, res, next) => {
 
 exports.viewPerson = (req, res, next) => {
   Family.findAll().then((fam) => {
-    console.log(fam)
-    res.render("renderPerson", { person:fam });
+    console.log(fam);
+    res.render("renderPerson", { person: fam });
   });
 };
