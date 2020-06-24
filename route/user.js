@@ -10,7 +10,11 @@ router.get('/',userController.getPage)
 
 router.get('/addPerson',userController.getForm)
 
-router.post('/postPerson',userController.postForm)
+router.post('/postFamily',userController.postFamily)
+
+router.get('/addUser',userController.getUserForm)
+
+router.post('/postPerson',userController.postUser)
 
 router.get('/viewPerson',userController.viewPerson)
 
