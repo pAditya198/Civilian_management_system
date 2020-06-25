@@ -17,7 +17,7 @@
         <img src='/covid2.jpg'>
       </div>
     </div>
-    <form action="/postFamily" method="POST">
+    <form action="<% if(editing){%>/editFamily/<%= fam.id %><% }else { %>/postFamily<% } %>" method="POST">
       <div class='right-container'>
         <header>
           <h1>Location Form</h1>
@@ -27,32 +27,38 @@
           <div class='set'>
             <div class='patients-name'>
               <label for='patients-name'>Family ID</label>
-              <input id='patients-name' name="familyId" placeholder="Enter your ID" type='text'>
+              <input id='patients-name' name="familyId" placeholder="Enter your ID" type='text'
+                value="<% if(editing){%><%= fam.familyId %><% } %>" <% if(editing){%>disabled<% } %>>
             </div>
             <div class='patients-email'>
               <label for='patients-email'>District</label>
-              <input id='patients-email' name="district" placeholder="Enter your district" type="text">
+              <input id='patients-email' name="district" placeholder="Enter your district" type="text"
+                value="<% if(editing){%><%= fam.district %><% } %>">
             </div>
           </div>
           <div class='set'>
             <div class='patients-address'>
 
               <label for='patients-address'>Address</label>
-              <input id='patients-address' placeholder="Patient's address" name="Address" type='text'>
+              <input id='patients-address' placeholder="Patient's address" name="Address" type='text'
+                value="<% if(editing){%><%= fam.Address %><% } %>">
             </div>
             <div class='patients-birthday'>
               <label for='patients-birthday'>State</label>
-              <input id='patients-birthday' name="state" placeholder="Enter your state" type='text'>
+              <input id='patients-birthday' name="state" placeholder="Enter your state" type='text'
+                value="<% if(editing){%><%= fam.state %><% } %>">
             </div>
           </div>
           <div class='set'>
             <div class='phone-number'>
               <label for='Phone-number'>Postal</label><br>
-              <input id='Phone-number' name="postal" placeholder="Enter your postal" type='text'>
+              <input id='Phone-number' name="postal" placeholder="Enter your postal" type='text'
+                value="<% if(editing){%><%= fam.postal %><% } %>">
             </div>
             <div class='phone-number'>
               <label for='Phone-number'>Country</label><br>
-              <input id='Phone-number' name="country" placeholder="Enter your country" type='text'>
+              <input id='Phone-number' name="country" placeholder="Enter your country" type='text'
+                value="<% if(editing){%><%= fam.country %><% } %>">
             </div>
           </div>
 

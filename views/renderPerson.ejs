@@ -11,7 +11,18 @@
     <% if(person.length>0){ %>
     <ul>
         <% for(let per of person) { %>
-        <li><b>Family</b> : <%= per.familyId %> <b>Location</b> : <%= per.district %> </li>
+        <li> <a href="/family/<%= per.id %>"> <b>Family</b> : <%= per.familyId %> <b>Location</b> :
+                <%= per.district %></a>
+            <div>
+                <form action="/editFamily/<%= per.id %>" method="GET">
+                    <button type="submit">Edit</button>
+                </form>
+                <form action="/deleteFamily/<%= per.id %>" method="POST">
+                    <button type="submit">Delete</button>
+                </form>
+            </div>
+
+        </li>
         <% } %>
     </ul>
     <% }else{ %>

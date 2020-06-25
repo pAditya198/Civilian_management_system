@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>Family Id : <%= fam.familyId %></h1>
+    <h1>Address : <%= fam.Address %></h1>
+    <h1>District : <%= fam.district %></h1>
+    <h1>State : <%= fam.state %></h1>
+    <h1>Postal : <%= fam.postal %></h1>
+    <h1>Country : <%= fam.country %></h1>
+    <div>
+        <h2>Members</h2>
+        <ul>
+            <% for(let per of person) { %>
+            <li>
+                <a href=""><%= per.name %></a>
+                <form action="/editUser/<%= per.id %>" method="GET">
+                    <button type="submit">Edit</button>
+                </form>
+                <form action="/deleteUser/<%= per.id %>" method="POST">
+                    <button type="submit">Delete</button>
+                </form>
+            </li>
+            <% } %>
+        </ul>
+    </div>
+
+</body>
+
+</html>

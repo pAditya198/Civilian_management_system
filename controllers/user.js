@@ -10,12 +10,44 @@ exports.getPage = (req, res, next) => {
 };
 
 exports.getForm = (req, res, next) => {
-  res.render("form");
+  res.render("form",{
+    editing:false
+  });
 };
 
 exports.getUserForm = (req, res, next) => {
   res.render("userForm", {
     familyId: "",
+    editing: false,
+  });
+};
+
+exports.getFamily = (req, res, next) => {
+  Family.findByPk(req.params.id).then((fam) => {
+    fam.getUsers().then((users) => {
+      res.render("renderFamily", {
+        fam,
+        person: users,
+      });
+    });
+  });
+};
+
+exports.getEditUser = (req, res, next) => {
+  User.findByPk(req.params.id).then((user) => {
+    var day = user.dob.getDate();
+    var month = user.dob.getMonth() + 1;
+    var year = user.dob.getFullYear();
+    if (month < 10) month = "0" + month;
+    if (day < 10) day = "0" + day;
+
+    var date = year + "-" + month + "-" + day;
+    res.render("userForm", {
+      familyId: user.familyId,
+      user,
+      date,
+      editing: true,
+    });
   });
 };
 
@@ -32,6 +64,7 @@ exports.postFamily = (req, res, next) => {
   Family.create(family).then((fam) => {
     res.render("userForm", {
       familyId: fam.familyId,
+      editing: false,
     });
   });
 };
@@ -45,6 +78,7 @@ exports.postUser = (req, res, next) => {
     email: req.body.email,
     phone: req.body.phone,
   };
+  console.log(entry.dob);
   Family.findAll({ where: { familyId: req.body.familyId } }).then((fam) => {
     console.log(fam[0].familyId);
     fam[0].createUser(entry).then((user) => {
@@ -87,20 +121,26 @@ exports.viewPerson = (req, res, next) => {
   });
 };
 
+exports.getEditFamily=(req,res,next)=>{
+Family.findByPk(req.params.id).then(fam=>{
+  res.render("form",{
+    editing:true,
+    fam
+  })
+})
+}
+
 exports.editFamily = (req, res, next) => {
-  const family = {
-    familyId: req.body.familyId,
-    Address: req.body.Address,
-    district: req.body.district,
-    state: req.body.state,
-    postal: req.body.postal,
-    country: req.body.country,
-  };
-  Family.findAll({ where: { familyId: req.body.familyId } })
+  Family.findByPk(req.params.id)
     .then((fam) => {
       // rewrite the edited data here
-      fam[0] = family;
-      return fam[0].save();
+      fam.familyId= req.body.familyId;
+      fam.Address= req.body.Address;
+      fam.district= req.body.district;
+      fam.state= req.body.state;
+      fam.postal= req.body.postal;
+      fam.country= req.body.country;
+      return fam.save();
     })
     .then((result) => {
       console.log("Family Updated");
@@ -110,18 +150,15 @@ exports.editFamily = (req, res, next) => {
 };
 
 exports.editUser = (req, res, next) => {
-  const entry = {
-    name: req.body.name,
-    age: req.body.age,
-    sex: req.body.sex,
-    dob: req.body.dob,
-    email: req.body.email,
-    phone: req.body.phone,
-  };
-  User.findByPk(req.body.id)
+  User.findByPk(req.params.id)
     .then((user) => {
       // rewrite the edited data here
-      user = entry;
+      user.name = req.body.name;
+      user.age = req.body.age;
+      user.sex = req.body.sex;
+      user.dob = req.body.dob;
+      user.email = req.body.email;
+      user.phone = req.body.phone;
       return user.save();
     })
     .then((result) => {
@@ -132,9 +169,9 @@ exports.editUser = (req, res, next) => {
 };
 
 exports.deleteFamily = (req, res, next) => {
-  Family.findAll({ where: { familyId: req.body.familyId } })
+  Family.findByPk(req.params.id)
     .then((fam) => {
-      return fam[0].destroy();
+      return fam.destroy();
     })
     .then((result) => {
       res.redirect("/");
@@ -143,7 +180,7 @@ exports.deleteFamily = (req, res, next) => {
 };
 
 exports.deleteUser = (req, res, next) => {
-  User.findByPk(req.body.id)
+  User.findByPk(req.params.id)
     .then((user) => {
       return user.destroy();
     })

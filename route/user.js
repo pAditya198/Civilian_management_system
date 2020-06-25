@@ -14,6 +14,7 @@ router.post("/postFamily", userController.postFamily);
 
 router.get("/addUser", userController.getUserForm);
 
+
 router.post("/postPerson", userController.postUser);
 
 router.post("/postMedical", userController.postMedical);
@@ -22,12 +23,18 @@ router.post("/postHistory", userController.postHistory);
 
 router.get("/viewPerson", userController.viewPerson);
 
-router.post("/editFamily", userController.editFamily);
+router.get("/editFamily/:id",userController.getEditFamily)
 
-router.delete("/deleteFamily", userController.deleteFamily);
+router.post("/editFamily/:id", userController.editFamily);
 
-router.post("/editUser", userController.editUser);
+router.post("/deleteFamily/:id", userController.deleteFamily);
 
-router.delete("/deleteUser", userController.deleteUser);
+router.get("/editUser/:id", userController.getEditUser);
+
+router.post("/editUser/:id", userController.editUser);
+
+router.post("/deleteUser/:id", userController.deleteUser);
+
+router.get('/family/:id',userController.getFamily)
 
 module.exports = router;
