@@ -19,7 +19,8 @@
         <ul>
             <% for(let per of person) { %>
             <li>
-                <a href=""><%= per.name %></a>
+                <a href="/userInfo/<%= per.id %>"><%= per.name %></a>
+
                 <form action="/editUser/<%= per.id %>" method="GET">
                     <button type="submit">Edit</button>
                 </form>

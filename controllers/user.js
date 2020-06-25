@@ -3,15 +3,22 @@ const User = require("../model/user");
 const Family = require("../model/family");
 const Medical = require("../model/medical");
 
-exports.getPage = (req, res, next) => {
-  Family.findAll().then((fam) => {
-    res.render("main", { count: fam.length });
+exports.getPage = async (req, res, next) => {
+  const families = await Family.count();
+  const users = await User.count();
+  const covid= await Medical.count({where:{status:"Positive"}})
+  const quarantined= await Medical.count({where:{isQuarantined:true}})
+  res.render("main", {
+    families,
+    users,
+    covid,
+    quarantined,
   });
 };
 
 exports.getForm = (req, res, next) => {
-  res.render("form",{
-    editing:false
+  res.render("form", {
+    editing: false,
   });
 };
 
@@ -21,6 +28,29 @@ exports.getUserForm = (req, res, next) => {
     editing: false,
   });
 };
+
+exports.getUserInfo=(req,res,next)=>{
+  User.findByPk(req.params.id).then(user=>{
+    var day = user.dob.getDate();
+    var month = user.dob.getMonth() + 1;
+    var year = user.dob.getFullYear();
+    if (month < 10) month = "0" + month;
+    if (day < 10) day = "0" + day;
+
+    var date = year + "-" + month + "-" + day;
+    user.getMedical().then(medical=>{
+      medical.getHistories().then(history=>{
+        console.log(history)
+        res.render("renderUser",{
+          user,
+          medical,
+          history,
+          date
+        })
+      })
+    })
+  })
+}
 
 exports.getFamily = (req, res, next) => {
   Family.findByPk(req.params.id).then((fam) => {
@@ -80,7 +110,6 @@ exports.postUser = (req, res, next) => {
   };
   console.log(entry.dob);
   Family.findAll({ where: { familyId: req.body.familyId } }).then((fam) => {
-    console.log(fam[0].familyId);
     fam[0].createUser(entry).then((user) => {
       res.render("medical", {
         id: user.id,
@@ -121,25 +150,25 @@ exports.viewPerson = (req, res, next) => {
   });
 };
 
-exports.getEditFamily=(req,res,next)=>{
-Family.findByPk(req.params.id).then(fam=>{
-  res.render("form",{
-    editing:true,
-    fam
-  })
-})
-}
+exports.getEditFamily = (req, res, next) => {
+  Family.findByPk(req.params.id).then((fam) => {
+    res.render("form", {
+      editing: true,
+      fam,
+    });
+  });
+};
 
 exports.editFamily = (req, res, next) => {
   Family.findByPk(req.params.id)
     .then((fam) => {
       // rewrite the edited data here
-      fam.familyId= req.body.familyId;
-      fam.Address= req.body.Address;
-      fam.district= req.body.district;
-      fam.state= req.body.state;
-      fam.postal= req.body.postal;
-      fam.country= req.body.country;
+      fam.familyId = req.body.familyId;
+      fam.Address = req.body.Address;
+      fam.district = req.body.district;
+      fam.state = req.body.state;
+      fam.postal = req.body.postal;
+      fam.country = req.body.country;
       return fam.save();
     })
     .then((result) => {
@@ -170,9 +199,18 @@ exports.editUser = (req, res, next) => {
 
 exports.deleteFamily = (req, res, next) => {
   Family.findByPk(req.params.id)
-    .then((fam) => {
+    .then(async (fam) => {
+      // const users= await fam.getUsers();
+      // const destroy=fam.destroy()
+      // return users
       return fam.destroy();
     })
+    // .then((users,des) => {
+    //   return users.forEach((user) => {
+    //     return user.destroy();
+    //   });
+    //   // console.log("hello",users)
+    // })
     .then((result) => {
       res.redirect("/");
     })

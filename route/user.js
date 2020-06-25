@@ -14,6 +14,7 @@ router.post("/postFamily", userController.postFamily);
 
 router.get("/addUser", userController.getUserForm);
 
+router.get("/userInfo/:id",userController.getUserInfo)
 
 router.post("/postPerson", userController.postUser);
 
