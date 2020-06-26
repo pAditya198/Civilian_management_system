@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <% if(states && district){%>
+    <form action="/searchCovid/state" method="POST">
+        <label for="State">State</label>
+        <select name="state" value="">
+            <% for(let state of states ){%>
+            <option value="<%= state %>"><%= state %></option>
+            <% } %>
+        </select>
+        <input type="submit" value="Submit" />
+    </form>
+    <form action="/searchCovid/district" method="POST">
+        <label for="District">District</label>
+        <select name="district" value="">
+            <% for(let dist of district ){%>
+            <option value="<%= dist %>"><%= dist %></option>
+            <% } %>
+        </select>
+        <input type="submit" value="Submit" />
+    </form>
+    <% }else{ %>
+    <ul>
+
+        <% for(let pos of positive ){%>
+        <% for(let family of fam ){%>
+        <% if(pos.userId===family.id){ %>
+        <li><a href="/userInfo/<%= family.id %>"> <b>Family</b> : <%= family.id %> <b>Location</b> :
+                <%= location %></a></li>
+        <% } %>
+        <% } %>
+        <% } %>
+    </ul>
+    <% } %>
+</body>
+
+</html>

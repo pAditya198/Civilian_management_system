@@ -3,11 +3,13 @@ const User = require("../model/user");
 const Family = require("../model/family");
 const Medical = require("../model/medical");
 
+const { Op } = require("sequelize");
+
 exports.getPage = async (req, res, next) => {
   const families = await Family.count();
   const users = await User.count();
-  const covid= await Medical.count({where:{status:"Positive"}})
-  const quarantined= await Medical.count({where:{isQuarantined:true}})
+  const covid = await Medical.count({ where: { status: "Positive" } });
+  const quarantined = await Medical.count({ where: { isQuarantined: true } });
   res.render("main", {
     families,
     users,
@@ -29,8 +31,8 @@ exports.getUserForm = (req, res, next) => {
   });
 };
 
-exports.getUserInfo=(req,res,next)=>{
-  User.findByPk(req.params.id).then(user=>{
+exports.getUserInfo = (req, res, next) => {
+  User.findByPk(req.params.id).then((user) => {
     var day = user.dob.getDate();
     var month = user.dob.getMonth() + 1;
     var year = user.dob.getFullYear();
@@ -38,19 +40,19 @@ exports.getUserInfo=(req,res,next)=>{
     if (day < 10) day = "0" + day;
 
     var date = year + "-" + month + "-" + day;
-    user.getMedical().then(medical=>{
-      medical.getHistories().then(history=>{
-        console.log(history)
-        res.render("renderUser",{
+    user.getMedical().then((medical) => {
+      medical.getHistories().then((history) => {
+        console.log(history);
+        res.render("renderUser", {
           user,
           medical,
           history,
-          date
-        })
-      })
-    })
-  })
-}
+          date,
+        });
+      });
+    });
+  });
+};
 
 exports.getFamily = (req, res, next) => {
   Family.findByPk(req.params.id).then((fam) => {
@@ -227,3 +229,69 @@ exports.deleteUser = (req, res, next) => {
     })
     .catch((err) => console.log(err));
 };
+
+exports.getSearchPage = (req, res, next) => {
+  Family.findAll({ attributes: ["state", "district"], raw: true }).then(
+    (state) => {
+      var newArr = [];
+      var district = [];
+      for (const key in state) {
+        if (state.hasOwnProperty(key)) {
+          newArr.push(state[key].state);
+          district.push(state[key].district);
+        }
+      }
+      newArr = new Set([...newArr]);
+      district = new Set([...district]);
+      req.state = newArr;
+      req.district = district;
+      res.render("searchCovid", {
+        states: newArr,
+        district,
+      });
+    }
+  );
+};
+exports.getSearchResult = (req, res, next) => {
+  const type = req.params.type;
+  Family.findAll({
+    attributes: ["id"],
+    where: { [type]: req.body[type] },
+    raw: true,
+  }).then((fam) => {
+    var id = [];
+    for (const key in fam) {
+      if (fam.hasOwnProperty(key)) {
+        id.push(fam[key].id);
+      }
+    }
+    console.log(id);
+    User.findAll({
+      attributes: ["id"],
+      where: {
+        familyId: {
+          [Op.or]: [id],
+        },
+      },
+      raw: true,
+    }).then((user) => {
+      Medical.findAll({
+        attributes: ["userId"],
+        where: {
+          status: "Positive",
+        },
+      }).then((positive) => {
+        console.log(user)
+        console.log(positive)
+        res.render("searchCovid", {
+          states: null,
+          district: null,
+          fam: user,
+          location: req.body[type],
+          positive,
+        });
+      });
+    });
+  });
+};
+

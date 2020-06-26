@@ -8,7 +8,6 @@ const User = require("./model/user");
 const Medical = require("./model/medical");
 const History = require("./model/history");
 const Family = require("./model/family");
-const FamilyIndex = require("./model/familyIndex");
 
 const userRoute = require("./route/user");
 
@@ -23,7 +22,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/", userRoute);
 
 User.belongsTo(Family, { constraints: true, onDelete: "CASCADE" });
-Family.hasMany(User)
+Family.hasMany(User);
 Medical.belongsTo(User, { constraints: true, onDelete: "CASCADE" });
 User.hasOne(Medical);
 Medical.hasMany(History, { constraints: true, onDelete: "CASCADE" });

@@ -14,7 +14,7 @@ router.post("/postFamily", userController.postFamily);
 
 router.get("/addUser", userController.getUserForm);
 
-router.get("/userInfo/:id",userController.getUserInfo)
+router.get("/userInfo/:id", userController.getUserInfo);
 
 router.post("/postPerson", userController.postUser);
 
@@ -24,7 +24,7 @@ router.post("/postHistory", userController.postHistory);
 
 router.get("/viewPerson", userController.viewPerson);
 
-router.get("/editFamily/:id",userController.getEditFamily)
+router.get("/editFamily/:id", userController.getEditFamily);
 
 router.post("/editFamily/:id", userController.editFamily);
 
@@ -36,6 +36,9 @@ router.post("/editUser/:id", userController.editUser);
 
 router.post("/deleteUser/:id", userController.deleteUser);
 
-router.get('/family/:id',userController.getFamily)
+router.get("/family/:id", userController.getFamily);
+
+router.get("/searchCovid",userController.getSearchPage)
+router.post("/searchCovid/:type",userController.getSearchResult)
 
 module.exports = router;
