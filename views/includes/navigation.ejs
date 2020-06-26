@@ -1,0 +1,23 @@
+<header class="main-header">
+    <button id="side-menu-toggle">Menu</button>
+    <nav class="main-header__nav">
+        <ul class="main-header__item-list">
+            <li class="main-header__item">
+                <a class="<%= path === '/' ? 'active' : '' %>" href="/"> Main </a>
+            </li>
+            <li class="main-header__item">
+                <a  href="/addPerson">Add Family </a>
+            </li>
+            <li class="main-header__item">
+                <a href="/addUser">User to Existing Family </a>
+            </li>
+            <li class="main-header__item">
+                <a class="<%= path === '/viewPerson' ? 'active' : '' %>" href="/viewPerson">View Person </a>
+            </li>
+            <li class="main-header__item">
+                <a class="<%= path === '/searchCovid' ? 'active' : '' %>" href="/searchCovid">Search for Corona Positive </a>
+            </li>
+            
+        </ul>
+    </nav>
+</header>

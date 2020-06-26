@@ -1,19 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
+<%- include('./includes/head.ejs') %>
 
 <body>
+    <%- include('./includes/navigation.ejs') %>
     <% if(person.length>0){ %>
-    <ul>
+    <div class="grid">
         <% for(let per of person) { %>
-        <li> <a href="/family/<%= per.id %>"> <b>Family</b> : <%= per.familyId %> <b>Location</b> :
-                <%= per.district %></a>
-            <div>
+        <div class="container">
+            <a href="/family/<%= per.id %>">
+                <div class="container__content">
+                    <h2 class="container-id">
+                        <b>Family ID</b> : <%= per.familyId %>
+                    </h2>
+                    <p class="container-location">
+                        <b>Location</b> : <%= per.district %>
+                    </p>
+                </div>
+            </a>
+            <div class="container__actions">
                 <form action="/editFamily/<%= per.id %>" method="GET">
                     <button type="submit">Edit</button>
                 </form>
@@ -21,10 +24,9 @@
                     <button type="submit">Delete</button>
                 </form>
             </div>
-
-        </li>
+        </div>
         <% } %>
-    </ul>
+    </div>
     <% }else{ %>
     <h1>No Entry has been made</h1>
     <% } %>

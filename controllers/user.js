@@ -10,77 +10,92 @@ exports.getPage = async (req, res, next) => {
   const users = await User.count();
   const covid = await Medical.count({ where: { status: "Positive" } });
   const quarantined = await Medical.count({ where: { isQuarantined: true } });
-  res.render("main", {
-    families,
-    users,
-    covid,
-    quarantined,
-  });
+  res
+    .render("main", {
+      families,
+      users,
+      covid,
+      quarantined,
+      path: "/",
+    })
+    
 };
 
 exports.getForm = (req, res, next) => {
-  res.render("form", {
-    editing: false,
-  });
+  res
+    .render("form", {
+      editing: false,
+    })
+    .catch((err) => console.log(err));
 };
 
 exports.getUserForm = (req, res, next) => {
-  res.render("userForm", {
-    familyId: "",
-    editing: false,
-  });
+  res
+    .render("userForm", {
+      familyId: "",
+      editing: false,
+    })
+    .catch((err) => console.log(err));
 };
 
 exports.getUserInfo = (req, res, next) => {
-  User.findByPk(req.params.id).then((user) => {
-    var day = user.dob.getDate();
-    var month = user.dob.getMonth() + 1;
-    var year = user.dob.getFullYear();
-    if (month < 10) month = "0" + month;
-    if (day < 10) day = "0" + day;
+  User.findByPk(req.params.id)
+    .then((user) => {
+      var day = user.dob.getDate();
+      var month = user.dob.getMonth() + 1;
+      var year = user.dob.getFullYear();
+      if (month < 10) month = "0" + month;
+      if (day < 10) day = "0" + day;
 
-    var date = year + "-" + month + "-" + day;
-    user.getMedical().then((medical) => {
-      medical.getHistories().then((history) => {
-        console.log(history);
-        res.render("renderUser", {
-          user,
-          medical,
-          history,
-          date,
+      var date = year + "-" + month + "-" + day;
+      user.getMedical().then((medical) => {
+        medical.getHistories().then((history) => {
+          console.log(history);
+          res.render("renderUser", {
+            user,
+            medical,
+            history,
+            date,
+            path: "/viewPerson",
+          });
         });
       });
-    });
-  });
+    })
+    .catch((err) => console.log(err));
 };
 
 exports.getFamily = (req, res, next) => {
-  Family.findByPk(req.params.id).then((fam) => {
-    fam.getUsers().then((users) => {
-      res.render("renderFamily", {
-        fam,
-        person: users,
+  Family.findByPk(req.params.id)
+    .then((fam) => {
+      fam.getUsers().then((users) => {
+        res.render("renderFamily", {
+          fam,
+          person: users,
+          path: "/viewPerson",
+        });
       });
-    });
-  });
+    })
+    .catch((err) => console.log(err));
 };
 
 exports.getEditUser = (req, res, next) => {
-  User.findByPk(req.params.id).then((user) => {
-    var day = user.dob.getDate();
-    var month = user.dob.getMonth() + 1;
-    var year = user.dob.getFullYear();
-    if (month < 10) month = "0" + month;
-    if (day < 10) day = "0" + day;
+  User.findByPk(req.params.id)
+    .then((user) => {
+      var day = user.dob.getDate();
+      var month = user.dob.getMonth() + 1;
+      var year = user.dob.getFullYear();
+      if (month < 10) month = "0" + month;
+      if (day < 10) day = "0" + day;
 
-    var date = year + "-" + month + "-" + day;
-    res.render("userForm", {
-      familyId: user.familyId,
-      user,
-      date,
-      editing: true,
-    });
-  });
+      var date = year + "-" + month + "-" + day;
+      res.render("userForm", {
+        familyId: user.familyId,
+        user,
+        date,
+        editing: true,
+      });
+    })
+    .catch((err) => console.log(err));
 };
 
 exports.postFamily = (req, res, next) => {
@@ -93,12 +108,14 @@ exports.postFamily = (req, res, next) => {
     country: req.body.country,
   };
 
-  Family.create(family).then((fam) => {
-    res.render("userForm", {
-      familyId: fam.familyId,
-      editing: false,
-    });
-  });
+  Family.create(family)
+    .then((fam) => {
+      res.render("userForm", {
+        familyId: fam.familyId,
+        editing: false,
+      });
+    })
+    .catch((err) => console.log(err));
 };
 
 exports.postUser = (req, res, next) => {
@@ -111,13 +128,15 @@ exports.postUser = (req, res, next) => {
     phone: req.body.phone,
   };
   console.log(entry.dob);
-  Family.findAll({ where: { familyId: req.body.familyId } }).then((fam) => {
-    fam[0].createUser(entry).then((user) => {
-      res.render("medical", {
-        id: user.id,
+  Family.findAll({ where: { familyId: req.body.familyId } })
+    .then((fam) => {
+      fam[0].createUser(entry).then((user) => {
+        res.render("medical", {
+          id: user.id,
+        });
       });
-    });
-  });
+    })
+    .catch((err) => console.log(err));
 };
 
 exports.postMedical = (req, res, next) => {
@@ -125,13 +144,15 @@ exports.postMedical = (req, res, next) => {
     status: req.body.status,
     isQuarantined: req.body.isQuarantined,
   };
-  User.findByPk(req.body.id).then((user) => {
-    user.createMedical(medical).then((med) => {
-      res.render("history", {
-        id: med.id,
+  User.findByPk(req.body.id)
+    .then((user) => {
+      user.createMedical(medical).then((med) => {
+        res.render("history", {
+          id: med.id,
+        });
       });
-    });
-  });
+    })
+    .catch((err) => console.log(err));
 };
 
 exports.postHistory = (req, res, next) => {
@@ -139,26 +160,34 @@ exports.postHistory = (req, res, next) => {
     status: req.body.status,
     name: req.body.name,
   };
-  Medical.findByPk(req.body.id).then((user) => {
-    user.createHistory(history);
-  });
-  res.redirect("/");
+  Medical.findByPk(req.body.id)
+    .then((user) => {
+      user.createHistory(history);
+    })
+    .then((result) => {
+      res.redirect("/");
+    })
+    .catch((err) => console.log(err));
 };
 
 exports.viewPerson = (req, res, next) => {
-  Family.findAll().then((fam) => {
-    console.log(fam);
-    res.render("renderPerson", { person: fam });
-  });
+  Family.findAll()
+    .then((fam) => {
+      console.log(fam);
+      res.render("renderPerson", { person: fam, path: "/viewPerson" });
+    })
+    .catch((err) => console.log(err));
 };
 
 exports.getEditFamily = (req, res, next) => {
-  Family.findByPk(req.params.id).then((fam) => {
-    res.render("form", {
-      editing: true,
-      fam,
-    });
-  });
+  Family.findByPk(req.params.id)
+    .then((fam) => {
+      res.render("form", {
+        editing: true,
+        fam,
+      });
+    })
+    .catch((err) => console.log(err));
 };
 
 exports.editFamily = (req, res, next) => {
@@ -202,17 +231,8 @@ exports.editUser = (req, res, next) => {
 exports.deleteFamily = (req, res, next) => {
   Family.findByPk(req.params.id)
     .then(async (fam) => {
-      // const users= await fam.getUsers();
-      // const destroy=fam.destroy()
-      // return users
       return fam.destroy();
     })
-    // .then((users,des) => {
-    //   return users.forEach((user) => {
-    //     return user.destroy();
-    //   });
-    //   // console.log("hello",users)
-    // })
     .then((result) => {
       res.redirect("/");
     })
@@ -231,8 +251,8 @@ exports.deleteUser = (req, res, next) => {
 };
 
 exports.getSearchPage = (req, res, next) => {
-  Family.findAll({ attributes: ["state", "district"], raw: true }).then(
-    (state) => {
+  Family.findAll({ attributes: ["state", "district"], raw: true })
+    .then((state) => {
       var newArr = [];
       var district = [];
       for (const key in state) {
@@ -248,9 +268,10 @@ exports.getSearchPage = (req, res, next) => {
       res.render("searchCovid", {
         states: newArr,
         district,
+        path: "/searchCovid",
       });
-    }
-  );
+    })
+    .catch((err) => console.log(err));
 };
 exports.getSearchResult = (req, res, next) => {
   const type = req.params.type;
@@ -280,18 +301,20 @@ exports.getSearchResult = (req, res, next) => {
         where: {
           status: "Positive",
         },
-      }).then((positive) => {
-        console.log(user)
-        console.log(positive)
-        res.render("searchCovid", {
-          states: null,
-          district: null,
-          fam: user,
-          location: req.body[type],
-          positive,
-        });
-      });
+      })
+        .then((positive) => {
+          console.log(user);
+          console.log(positive);
+          res.render("searchCovid", {
+            states: null,
+            district: null,
+            fam: user,
+            location: req.body[type],
+            positive,
+            path: "/searchCovid",
+          });
+        })
+        .catch((err) => console.log(err));
     });
   });
 };
-

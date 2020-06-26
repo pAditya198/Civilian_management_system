@@ -1,45 +1,60 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
+<%- include('./includes/head.ejs') %>
 
 <body>
-    <% if(states && district){%>
-    <form action="/searchCovid/state" method="POST">
-        <label for="State">State</label>
-        <select name="state" value="">
-            <% for(let state of states ){%>
-            <option value="<%= state %>"><%= state %></option>
-            <% } %>
-        </select>
-        <input type="submit" value="Submit" />
-    </form>
-    <form action="/searchCovid/district" method="POST">
-        <label for="District">District</label>
-        <select name="district" value="">
-            <% for(let dist of district ){%>
-            <option value="<%= dist %>"><%= dist %></option>
-            <% } %>
-        </select>
-        <input type="submit" value="Submit" />
-    </form>
-    <% }else{ %>
-    <ul>
+    <%- include('./includes/navigation.ejs') %>
 
+    <% if(states && district){%>
+    <div>
+        <form action="/searchCovid/state" method="POST">
+            <label for="State">State</label>
+            <select name="state" value="">
+                <% for(let state of states ){%>
+                <option value="<%= state %>"><%= state %></option>
+                <% } %>
+            </select>
+            <input type="submit" value="Submit" />
+        </form>
+        <form action="/searchCovid/district" method="POST">
+            <label for="District">District</label>
+            <select name="district" value="">
+                <% for(let dist of district ){%>
+                <option value="<%= dist %>"><%= dist %></option>
+                <% } %>
+            </select>
+            <input type="submit" value="Submit" />
+        </form>
+    </div>
+    <% }else{ %><div class="grid">
         <% for(let pos of positive ){%>
         <% for(let family of fam ){%>
         <% if(pos.userId===family.id){ %>
-        <li><a href="/userInfo/<%= family.id %>"> <b>Family</b> : <%= family.id %> <b>Location</b> :
-                <%= location %></a></li>
+
+        <div class="container">
+            <a href="/userInfo/<%= family.id %>">
+                <div class="container__content">
+                    <h2 class="container-id">
+                        <b>Member ID</b> : <%= family.id %>
+                    </h2>
+                    <p class="container-location">
+                        <b>Name</b> : <%= family.name %>
+                    </p>
+                </div>
+            </a>
+            <div class="container__actions">
+                <form action="/editUser/<%= family.id %>" method="GET">
+                    <button type="submit">Edit</button>
+                </form>
+                <form action="/deleteUser/<%= family.id %>" method="POST">
+                    <button type="submit">Delete</button>
+                </form>
+            </div>
+        </div>
+
         <% } %>
         <% } %>
         <% } %>
-    </ul>
-    <% } %>
+        <% } %>
+    </div>
 </body>
 
 </html>

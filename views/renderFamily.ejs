@@ -1,37 +1,44 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
+<%- include('./includes/head.ejs') %>
 
 <body>
-    <h1>Family Id : <%= fam.familyId %></h1>
-    <h1>Address : <%= fam.Address %></h1>
-    <h1>District : <%= fam.district %></h1>
-    <h1>State : <%= fam.state %></h1>
-    <h1>Postal : <%= fam.postal %></h1>
-    <h1>Country : <%= fam.country %></h1>
+    <%- include('./includes/navigation.ejs') %>
     <div>
-        <h2>Members</h2>
-        <ul>
-            <% for(let per of person) { %>
-            <li>
-                <a href="/userInfo/<%= per.id %>"><%= per.name %></a>
-
-                <form action="/editUser/<%= per.id %>" method="GET">
-                    <button type="submit">Edit</button>
-                </form>
-                <form action="/deleteUser/<%= per.id %>" method="POST">
-                    <button type="submit">Delete</button>
-                </form>
-            </li>
-            <% } %>
-        </ul>
+        <div class="container centered">
+            <p>Family Id : <%= fam.familyId %></p>
+            <p>Address : <%= fam.Address %></p>
+            <p>District : <%= fam.district %></p>
+            <p>State : <%= fam.state %></p>
+            <p>Postal : <%= fam.postal %></p>
+            <p>Country : <%= fam.country %></p>
+        </div>
+        <div class="centered">
+            <h2>Members</h2>
+            <div class="grid">
+                <% for(let per of person) { %>
+                <div class="container">
+                    <a href="/userInfo/<%= per.id %>">
+                        <div class="container__content">
+                            <h2 class="container-id">
+                                <b>Member ID</b> : <%= per.id %>
+                            </h2>
+                            <p class="container-location">
+                                <b>Name</b> : <%= per.name %>
+                            </p>
+                        </div>
+                    </a>
+                    <div class="container__actions">
+                        <form action="/editUser/<%= per.id %>" method="GET">
+                            <button type="submit">Edit</button>
+                        </form>
+                        <form action="/deleteUser/<%= per.id %>" method="POST">
+                            <button type="submit">Delete</button>
+                        </form>
+                    </div>
+                </div>
+                <% } %>
+            </div>
+        </div>
     </div>
-
 </body>
 
 </html>

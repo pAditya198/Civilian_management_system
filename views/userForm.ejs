@@ -58,12 +58,10 @@
             <div class='patients-gender'>
               <label for='patient-gender-female'>Gender</label>
               <div class='radio-container'>
-                <input <% if(!editing || user.sex==='F'){%> checked='' <% } %> id='patient-gender-female' type='radio'
-                  value="F" name="sex">
-                <label for='patient-gender-female'>Female</label>
-                <input <% if(editing && user.sex==='M'){%> checked='' <% } %> id='patient-gender-male' type='radio'
-                  name="sex" value='M'>
-                <label for='patient-gender-male'>Male</label>
+                <select id='patients-name' name="sex" value="<% if(editing){%><%= user.sex %><% } %>">
+                  <option value="F">Female</option>
+                  <option value="M">Male</option>
+                </select>
               </div>
             </div>
             <div class='phone-number'>
